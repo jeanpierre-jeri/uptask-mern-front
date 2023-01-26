@@ -6,6 +6,8 @@ import OlvidePassword, { action as olvideAction } from '../pages/OlvidePassword'
 import Registrar, { action as registrarAction } from '../pages/Registrar'
 import ConfirmarCuenta, { loader as confirmarLoader } from '../pages/ConfirmarCuenta'
 import RutaProtegida, { loader as rutaProtegidaLoader } from '../layouts/RutaProtegida'
+import Proyectos from '../pages/Proyectos'
+import NuevoProyecto from '../pages/NuevoProyecto'
 
 const router = ({ setUser }) => {
   return createBrowserRouter([
@@ -45,7 +47,17 @@ const router = ({ setUser }) => {
     {
       path: '/proyectos',
       element: <RutaProtegida />,
-      loader: rutaProtegidaLoader({ setUser })
+      loader: rutaProtegidaLoader({ setUser }),
+      children: [
+        {
+          index: true,
+          element: <Proyectos />
+        },
+        {
+          path: 'crear-proyecto',
+          element: <NuevoProyecto />
+        }
+      ]
     }
   ])
 }
