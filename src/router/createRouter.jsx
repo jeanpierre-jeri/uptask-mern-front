@@ -6,8 +6,10 @@ import OlvidePassword, { action as olvideAction } from '../pages/OlvidePassword'
 import Registrar, { action as registrarAction } from '../pages/Registrar'
 import ConfirmarCuenta, { loader as confirmarLoader } from '../pages/ConfirmarCuenta'
 import RutaProtegida, { loader as rutaProtegidaLoader } from '../layouts/RutaProtegida'
-import Proyectos from '../pages/Proyectos'
+import Proyectos, { loader as proyectosLoader } from '../pages/Proyectos'
 import NuevoProyecto from '../pages/NuevoProyecto'
+import Proyecto, { loader as proyectoLoader } from '../pages/Proyecto'
+import EditarProyecto from '../pages/EditarProyecto'
 
 const router = ({ setUser }) => {
   return createBrowserRouter([
@@ -51,11 +53,22 @@ const router = ({ setUser }) => {
       children: [
         {
           index: true,
-          element: <Proyectos />
+          element: <Proyectos />,
+          loader: proyectosLoader
         },
         {
           path: 'crear-proyecto',
           element: <NuevoProyecto />
+        },
+        {
+          path: ':id',
+          element: <Proyecto />,
+          loader: proyectoLoader
+        },
+        {
+          path: 'editar/:id',
+          element: <EditarProyecto />,
+          loader: proyectoLoader
         }
       ]
     }

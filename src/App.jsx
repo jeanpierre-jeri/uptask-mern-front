@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import useAuth from './hooks/useAuth.js'
 import createRouter from './router/createRouter'
+import { ProyectosProvider } from './context/proyectos.context'
 
 export default function App() {
   const { setUser } = useAuth()
@@ -10,7 +11,9 @@ export default function App() {
   }, [])
   return (
     <div>
-      <RouterProvider router={router} />
+      <ProyectosProvider>
+        <RouterProvider router={router} />
+      </ProyectosProvider>
     </div>
   )
 }
