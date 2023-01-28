@@ -65,7 +65,11 @@ export default function Registrar() {
         Crea tu cuenta y administra tus <span className='text-slate-700'>proyectos</span>
       </h1>
 
-      {data?.msg && <Alerta alerta={data} />}
+      {data?.msg && (
+        <div className='mt-10'>
+          <Alerta alerta={data} />
+        </div>
+      )}
 
       <Form ref={form} method='post' action='/registrar' className='my-10 bg-white shadow rounded-lg p-10'>
         {/* Nombre */}

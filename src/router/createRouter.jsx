@@ -10,6 +10,7 @@ import Proyectos, { loader as proyectosLoader } from '../pages/Proyectos'
 import NuevoProyecto from '../pages/NuevoProyecto'
 import Proyecto, { loader as proyectoLoader } from '../pages/Proyecto'
 import EditarProyecto from '../pages/EditarProyecto'
+import NuevoColaborador from '../pages/NuevoColaborador'
 
 const router = ({ setUser }) => {
   return createBrowserRouter([
@@ -59,6 +60,11 @@ const router = ({ setUser }) => {
         {
           path: 'crear-proyecto',
           element: <NuevoProyecto />
+        },
+        {
+          path: 'nuevo-colaborador/:id',
+          element: <NuevoColaborador />,
+          loader: proyectoLoader
         },
         {
           path: ':id',

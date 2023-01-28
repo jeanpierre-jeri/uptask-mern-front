@@ -1,6 +1,7 @@
 import Alerta from './Alerta'
 import useProyectos from '../hooks/useProyectos'
 import { useNavigate } from 'react-router-dom'
+import { cleanFormInputs } from '../utils/form'
 
 export default function FormularioProyecto({
   id = '',
@@ -34,14 +35,6 @@ export default function FormularioProyecto({
       }
       e.target.style.pointerEvents = 'auto'
     }, 3500)
-  }
-
-  const cleanFormInputs = (form) => {
-    for (const item of form.children) {
-      if (!item.children.length) continue
-
-      item.children[1].value = ''
-    }
   }
 
   return (
