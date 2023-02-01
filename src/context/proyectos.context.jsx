@@ -1,6 +1,5 @@
 import { createContext, useState } from 'react'
 import { api } from '../utils/api'
-import { token } from '../utils/auth'
 
 const ProyectosContext = createContext()
 
@@ -8,6 +7,7 @@ export function ProyectosProvider({ children }) {
   const [alerta, setAlerta] = useState({ msg: '', error: false })
   const [modalFormularioTarea, setModalFormularioTarea] = useState(false)
   const [modalEliminarTarea, setModalEliminarTarea] = useState(false)
+  const [modalEliminarColaborador, setModalEliminarColaborador] = useState(false)
   const [idTarea, setIdTarea] = useState(null)
   const [colaborador, setColaborador] = useState({ _id: '', nombre: '', email: '' })
 
@@ -23,7 +23,7 @@ export function ProyectosProvider({ children }) {
   // Crear Proyecto
   const nuevoProyecto = async ({ formData }) => {
     try {
-      await api.post('/proyectos', formData, config())
+      await api.post('/proyectos', formData)
 
       mostrarAlerta({
         msg: 'Proyecto creado correctamente',
@@ -37,7 +37,7 @@ export function ProyectosProvider({ children }) {
   // Actualizar Proyecto
   const actualizarProyecto = async ({ formData, id }) => {
     try {
-      await api.put(`/proyectos/${id}`, formData, config())
+      await api.put(`/proyectos/${id}`, formData)
 
       mostrarAlerta({
         msg: 'Proyecto actualizado correctamente',
@@ -51,7 +51,7 @@ export function ProyectosProvider({ children }) {
   // Eliminar Proyecto
   const eliminarProyecto = async (id) => {
     try {
-      const { data } = await api.delete(`/proyectos/${id}`, config())
+      const { data } = await api.delete(`/proyectos/${id}`)
       mostrarAlerta({
         msg: data.message,
         error: false
@@ -76,7 +76,7 @@ export function ProyectosProvider({ children }) {
   // Crear Tarea
   const crearTarea = async ({ tarea }) => {
     try {
-      await api.post('/tareas', tarea, config())
+      await api.post('/tareas', tarea)
       mostrarAlerta({
         msg: 'Tarea creada correctamente',
         error: false
@@ -92,7 +92,7 @@ export function ProyectosProvider({ children }) {
   // Actualizar Tarea
   const actualizarTarea = async ({ tarea, tareaId }) => {
     try {
-      await api.put(`/tareas/${tareaId}`, tarea, config())
+      await api.put(`/tareas/${tareaId}`, tarea)
       mostrarAlerta({
         msg: 'Tarea actualizada correctamente',
         error: false
@@ -108,7 +108,7 @@ export function ProyectosProvider({ children }) {
   // Eliminar Tarea
   const eliminarTarea = async () => {
     try {
-      const { data } = await api.delete(`/tareas/${idTarea}`, config())
+      const { data } = await api.delete(`/tareas/${idTarea}`)
       mostrarAlerta({
         msg: data.message,
         error: false
@@ -126,7 +126,7 @@ export function ProyectosProvider({ children }) {
   // Buscar colaborador
   const submitColaborador = async ({ email }) => {
     try {
-      const { data } = await api.post('/proyectos/colaboradores', { email }, config())
+      const { data } = await api.post('/proyectos/colaboradores', { email })
       setColaborador(data)
     } catch (error) {
       mostrarAlerta({
@@ -139,11 +139,7 @@ export function ProyectosProvider({ children }) {
   // Agregar Colaborador
   const agregarColaborador = async ({ projectId }) => {
     try {
-      const { data } = await api.post(
-        `/proyectos/colaboradores/${projectId}`,
-        { colaboradorId: colaborador._id },
-        config()
-      )
+      const { data } = await api.post(`/proyectos/colaboradores/${projectId}`, { colaboradorId: colaborador._id })
       mostrarAlerta({
         msg: data.message,
         error: false
@@ -157,13 +153,33 @@ export function ProyectosProvider({ children }) {
     }
   }
 
-  // Configuracion para header de autenticacion de axios
-  const config = () => {
-    return {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token()}`
-      }
+  // Eliminar Colaborador
+  const eliminarColaborador = async ({ projectId }) => {
+    try {
+      const { data } = await api.delete(`/proyectos/colaboradores/${projectId}?colaboradorId=${colaborador._id}`)
+      mostrarAlerta({
+        msg: data.message,
+        error: false
+      })
+      setColaborador({ _id: '', nombre: '', email: '' })
+      setModalEliminarColaborador(false)
+    } catch (error) {
+      mostrarAlerta({
+        msg: error.response.data.message,
+        error: true
+      })
+    }
+  }
+
+  // Completar Tarea
+  const completarTarea = async ({ id }) => {
+    try {
+      await api.post(`/tareas/estado/${id}`)
+    } catch (error) {
+      mostrarAlerta({
+        msg: error.response.data.message,
+        error: true
+      })
     }
   }
 
@@ -187,6 +203,12 @@ export function ProyectosProvider({ children }) {
     setModalEliminarTarea((prevState) => !prevState)
   }
 
+  // Toggle modal confirmar eliminar un colaborador
+  const handleModalEliminarColaborador = ({ colaborador = { _id: '', nombre: '', email: '' } }) => {
+    setColaborador(colaborador)
+    setModalEliminarColaborador((prevState) => !prevState)
+  }
+
   return (
     <ProyectosContext.Provider
       value={{
@@ -194,6 +216,7 @@ export function ProyectosProvider({ children }) {
         colaborador,
         modalEliminarTarea,
         modalFormularioTarea,
+        modalEliminarColaborador,
         agregarColaborador,
         eliminarProyecto,
         eliminarTarea,
@@ -202,7 +225,10 @@ export function ProyectosProvider({ children }) {
         mostrarAlerta,
         submitColaborador,
         submitProyecto,
-        submitTarea
+        submitTarea,
+        handleModalEliminarColaborador,
+        eliminarColaborador,
+        completarTarea
       }}
     >
       {children}
