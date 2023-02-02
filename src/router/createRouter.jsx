@@ -12,7 +12,7 @@ import Proyecto, { loader as proyectoLoader } from '../pages/Proyecto'
 import EditarProyecto from '../pages/EditarProyecto'
 import NuevoColaborador from '../pages/NuevoColaborador'
 
-const router = ({ setUser }) => {
+const router = ({ setUser, setProyectos }) => {
   return createBrowserRouter([
     {
       path: '/',
@@ -55,7 +55,7 @@ const router = ({ setUser }) => {
         {
           index: true,
           element: <Proyectos />,
-          loader: proyectosLoader
+          loader: proyectosLoader({ setProyectos })
         },
         {
           path: 'crear-proyecto',

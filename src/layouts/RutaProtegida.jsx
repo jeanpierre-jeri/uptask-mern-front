@@ -8,15 +8,8 @@ export function loader({ setUser }) {
   return async function () {
     if (!token()) return redirect('/')
 
-    const options = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token()}`
-      }
-    }
-
     try {
-      const { data } = await api.get('/usuarios/perfil', options)
+      const { data } = await api.get('/usuarios/perfil')
       setUser(data)
 
       return null

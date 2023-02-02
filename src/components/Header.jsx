@@ -1,8 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
+import useProyectos from '../hooks/useProyectos'
 import { deleteToken } from '../utils/auth'
+import Busqueda from './Busqueda'
 
 export default function Header() {
+  const { handleModalBuscador } = useProyectos()
   const navigate = useNavigate()
+
   const handleClick = () => {
     deleteToken()
     navigate('/')
@@ -16,7 +20,7 @@ export default function Header() {
         </Link>
 
         <div className='flex flex-col md:flex-row items-center gap-4'>
-          <button type='button' className='font-bold uppercase'>
+          <button onClick={handleModalBuscador} type='button' className='font-bold uppercase'>
             Buscar Proyecto
           </button>
 
@@ -31,6 +35,8 @@ export default function Header() {
           >
             Cerrar Sesión
           </button>
+
+          <Busqueda />
         </div>
       </div>
     </header>

@@ -10,6 +10,8 @@ export function ProyectosProvider({ children }) {
   const [modalEliminarColaborador, setModalEliminarColaborador] = useState(false)
   const [idTarea, setIdTarea] = useState(null)
   const [colaborador, setColaborador] = useState({ _id: '', nombre: '', email: '' })
+  const [buscador, setBuscador] = useState(false)
+  const [proyectos, setProyectos] = useState(['a'])
 
   // Submit proyecto para crear o actualizar
   const submitProyecto = async ({ id, ...formData }) => {
@@ -209,6 +211,11 @@ export function ProyectosProvider({ children }) {
     setModalEliminarColaborador((prevState) => !prevState)
   }
 
+  // Toggle modal buscador
+  const handleModalBuscador = () => {
+    setBuscador((prevState) => !prevState)
+  }
+
   return (
     <ProyectosContext.Provider
       value={{
@@ -217,6 +224,8 @@ export function ProyectosProvider({ children }) {
         modalEliminarTarea,
         modalFormularioTarea,
         modalEliminarColaborador,
+        buscador,
+        proyectos,
         agregarColaborador,
         eliminarProyecto,
         eliminarTarea,
@@ -228,7 +237,9 @@ export function ProyectosProvider({ children }) {
         submitTarea,
         handleModalEliminarColaborador,
         eliminarColaborador,
-        completarTarea
+        completarTarea,
+        handleModalBuscador,
+        setProyectos
       }}
     >
       {children}

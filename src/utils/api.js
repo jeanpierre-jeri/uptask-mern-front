@@ -6,7 +6,11 @@ const API_URL = import.meta.env.VITE_BACKEND_URL
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token()}`
+    'Content-Type': 'application/json'
   }
+})
+
+api.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${token()}`
+  return config
 })
